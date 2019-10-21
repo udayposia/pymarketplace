@@ -1,0 +1,106 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>PyMarketplace</title>
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600,200' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="{% static 'img/uberified.jpg' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+
+  <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <style media="screen">
+  footer {
+        
+          /* padding: 10px 10px 0px 10px; */
+          bottom: 0;
+        }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <!-- Brand/logo -->
+
+    <div class="navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+
+          <a class="navbar-brand" href="/"><img src="{% static 'img/pymarket.png' %}" alt="logo" style="height:35px; "></a>
+          <a class="navbar-brand" href="/">PyMarket</a>
+        </div>
+        <form class="navbar-form navbar-left" role="search" method="GET" action="/search">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" name="title" class="form-control" placeholder="Find services">
+              <span class="input-group-btn">
+                <button class="btn btn-success">Find</button>
+              </span>
+            </div>
+          </div>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+          {% if 'user_obj' in request.session %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              <!-- Default avatar -->
+
+              <img src=" /media/{{ request.session.user_obj.avatar }} " class="img-circle" height="34" width="34">&nbsp;
+              {{ request.session.user_obj.first_name }} {{ request.session.user_obj.last_name }} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{%url 'create_job' %}">Create a Job</a></li>
+              <li><a href="{%url 'my_jobs' %}">My Jobs</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobs_request' %}">My Jobs Requests</a></li>
+              <li><a href="">My Purchases</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="">My Profile</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="/logout/">Logout</a></li>
+            </ul>
+          </li>
+          {% else %}
+            <li><a href="/login/">Login</a></li>
+            <li><a href="/signup/">SignUp</a></li>
+
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <div id="category">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li><a href="/category/graphics-design">Graphics & Design</a></li>
+          <li><a href="/category/digital-marketing">Digital Marketing</a></li>
+          <li><a href="/category/video-animation">Video & Animation</a></li>
+          <li><a href="/category/music-audio">Music & Audio</a></li>
+          <li><a href="/category/programming-tech">Programming & Tech</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div id="body">
+    <div class="container">
+      {% block page %}
+      {% endblock %}
+    </div>
+  </div>
+
+  <footer id="footer">
+    <div class="pull-right hidden-xs">
+      made with &#x1F496; by <b>Uday Posia</b>.
+    </div>
+    <div class="container">
+      <span>PyMarketplace &copy; 2019</span>
+    </div>
+  </footer>
+
+</body>
+</html>

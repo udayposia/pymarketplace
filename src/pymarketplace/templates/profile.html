@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+
+{% block page %}
+
+  {% if request.session.user_obj.username == profile.username   %}
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="jumbotron text-center">
+        <h1><b>  {{ profile.first_name}} {{ profile.last_name }}</b></h1>
+        <input class="form-control" name="slogan" value="{{ profile.slogan }}">
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <img src="{{ profile.avatar.url }}" class="img-circle" height="120" width="120">
+          <h3 class="text-uppercase"><b>About {{ profile.first_name }}</b></h3>
+          <hr />
+          <input class="form-control" name="about" value="{{ profile.about }}">
+          <br />
+          <button type="submit" class="btn btn-success">Update</button>
+        </div>
+      </div>
+    </form>
+
+  {% else %}
+
+    <div class="jumbotron text-center">
+      <h1><b>{{ profile.first_name}} {{ profile.last_name }}</b></h1>
+      <p>{{  profile.slogan  }}</p>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <img src="{{ profile.avatar.url }}" class="img-circle" height="120" width="120">
+        <h3 class="text-uppercase"><b>About {{ profile.first_name}} {{ profile.last_name }}</b></h3>
+        <hr />
+        <p>{{ profile.about }}</p>
+      </div>
+    </div>
+  {% endif %}
+
+
+
+
+  <h3 class="text-uppercase" style="margin-top: 50px;"><b>{{ profile.first_name}} {{ profile.last_name }}'s gigs</b></h3>
+  <div class="row">
+    {% for job in jobs %}
+      <div class="col-md-3">
+        <div class="thumbnail" style="height:290px">
+          <a href=""><img src="{{ job.photo.url }}" style=" height:150px; weight:200px" alt="thumbnail"></a>
+          <p style="margin-left: 10px;"><a href="{% url 'view_job'  job.id %}" >{{ job.title }}</a></p>
+          <div style="position: absolute;left: 30px;bottom: 29px;width:200px">
+
+          <p>
+            <span>by<a href="{% url 'view_profile' job.job_author.username %}"> {{ profile.first_name}} {{ profile.last_name }}</a></span>
+            <b class="green pull-right">{{ job.price }}$</b>
+          </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

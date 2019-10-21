@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block page %}
+{% if error %}
+  <div class="alert alert-warning alert-dismissable" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Warning!</strong> {{ error }}
+  </div>
+{% endif %}
+  <h1 style="margin-bottom: 30px">My Sales</h1>
+  <div class="panel panel-default">
+    <table class="table table-bordered table-striped">
+      <thead class="bg-success">
+        <tr>
+          <th></th>
+          <th>Job Title</th>
+          <th>Buyer</th>
+          <th>Price ($)</th>
+          <th>Submission Date</th>
+          <th>Approve</th>
+
+        </tr>
+      </thead>
+      <form  method="post">
+
+        {% csrf_token %}
+      <tbody>
+        {% if orders %}
+        {% for order in orders %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href=""> {{ order.job_details.title }} </a></td>
+            <td><a href=""> {{ order.order_author.first_name }} </a></td>
+            <td> {{ order.order_budget }} </td>
+            <td> {{ order.order_deadline }} </td>
+
+            <td>
+              {% if order.order_status == True %}
+                  <!-- <input type="submit" value="reject" name="status"> -->
+                  Order Is Active
+              {% else %}
+                  <input type="submit" value="accept" class="btn btn-success" name="status">
+              {% endif %}
+                  <input type="hidden" name="order_id" value= "{{ order.id }}">
+                  <input type="hidden" name="job_id" value= "{{ order.job_details.id }}">
+
+                  <input type="hidden" name="job_author_id" value= "{{ order.job_details.job_author.id }}">
+
+            </td>
+          </tr>
+              </form>
+        {% endfor %}
+        {% else %}
+        <tr>
+          <td colspan="5" align="center"> <h2>Sorry!!! No Offers on your Job at the moment</h2></td>
+
+        </tr>
+
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% load staticfiles %} {% block page %}
+
+<div class="row">
+  <div class="col-md-12">
+    <img src="{% static 'img/upwork.jpg' %}" class="banner">
+  </div>
+
+  {% if jobs %} {% for job in jobs %}
+    <div class="col-md-3" >
+    <div class="thumbnail" style="height:290px">
+      <a href="">
+        <img src="{{ job.photo.url }}" style=" height:150px; weight:200px" alt="thumbnail">
+      </a>
+      <div class="caption" style="bottom: 10px;">
+        <p>
+          <a href="{% url 'view_job'  job.id %}">{{ job.title }}</a>
+        </p>
+        <div style="position: absolute;left: 30px;bottom: 29px;width:200px">
+
+        <p>
+          <span>by
+            <a href="{% url 'view_profile' job.job_author.username %}">{{ job.job_author.first_name }} {{ job.job_author.last_name }}</a>
+          </span>
+          <b class="green pull-right">${{ job.price }}</b>
+        </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %} {% else %}
+  <div class="text-center">
+    <br/>
+    <p>
+      <h3>There is curently no active jobs, get started by creating the a new one!</h3>
+
+    </p>
+    <br/>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

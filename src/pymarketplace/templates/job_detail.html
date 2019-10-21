@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+
+{% block page %}
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h3>{{ jobs.title }}</h3>
+          <hr>
+          <img src="{{ jobs.photo.url }}" class="img-responsive center-block">
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>About this job</h4>
+        </div>
+        <div class="panel-body">
+          <p>{{ jobs.description }}</p>
+        </div>
+      </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Offers Placed</h4>
+        </div>
+
+
+        <ul class="list-group">
+          {% for order in orders %}
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-2">
+                  <img src="{{ order.order_author.avatar.url }}" class="img-circle center-block" height="60">
+                </div>
+                <div class="col-md-6">
+                  <h5>{{ order.order_author.first_name }} {{ order.order_author.last_name }}</h5>
+                  <p>{{ order.author_offer }}</p>
+                </div>
+                <div class="col-md-2">
+                  <p><b class="green pull-right">{{ order.job_details.price }}$</b></p>
+                  <span class="align-right">. </span>
+                  <p><b class=" pull-right align-bottom">{{ order.ordered_date | naturaltime }}</b></p>
+
+                </div>
+                  {% if request.session.user_obj.username == order.order_author.username  %}
+                <div class="col-md-2">
+
+                    <a class="btn btn-primary btn-block" href="">Edit Offer</a>
+
+                </div>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+          {% if 'user_obj' in request.session %}
+          {% if request.session.user_obj.username == jobs.job_author.username %}
+
+          {% else %}
+
+              <a class="btn btn-success btn-block" href="{% url 'create_order' jobs.id %}">Order Now (${{ jobs.price }})</a>
+          </div>
+        </div>
+          {% endif %}
+          {% else %}
+
+            You need to login to order this jobs!
+            <a href="/login/">Login here</a>
+
+          {% endif %}
+
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <img src="{{ jobs.job_author.avatar.url }}" class="img-circle center-block" height="100" width="100">
+          <a href=""><h4 class="text-center">{{ jobs.job_author.username }}</h4></a>
+          <hr/>
+          <p>{{ jobs.job_author.about }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
